@@ -67,6 +67,9 @@ class Admin::Cms::PagesController < Admin::Cms::BaseController
     (params[:cms_page] || []).each_with_index do |id, index|
       ::Cms::Page.where(:id => id).update_all(:position => index)
     end
+    if params[:cms_page].any?
+      ::Cms::Page.find(params[:cms_page].first).run_callbacks :update
+    end
     render :nothing => true
   end
 
